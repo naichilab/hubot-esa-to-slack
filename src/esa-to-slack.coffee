@@ -77,6 +77,17 @@ module.exports = (robot) ->
           resolve ""
           return
 
+  getTagArray = (title) ->
+    titlearray = title.split(" ")
+    tagarray = []
+
+    for item in titlearray
+      m = /^#\S+$/.exec(item)
+      if m?
+        tagarray.push m[0]
+    tagarray
+
+
   robot.respond /slack/, (msg) ->
 
     msg.send "slack comman received"
@@ -87,6 +98,15 @@ module.exports = (robot) ->
       postToChannel (result)
     .then (result) ->
       msg.send "send message completed"
+
+
+
+  # robot.respond /regexp/, (msg) ->
+  #   title = "test #pj-req-100 #pj-req-101"
+  #   tagarray = getTagArray(title)
+  #
+  #   for item in tagarray
+  #     robot.logger.info item
 
 
   robot.router.post "/esa-to-slack/post", (req, msg) ->
@@ -108,12 +128,19 @@ module.exports = (robot) ->
     robot.logger.info message
     robot.logger.info url
 
-    robot.logger.info "**************"
-    robot.logger.into "post received"
-    getChannelId("pj-req-100")
-    .then (result) ->
-      robot.logger.into "channel id is #{result}"
-      postToChannel (result)
-    .then (result) ->
-      robot.logger.into "send message completed"
-    robot.logger.info "**************"
+    tagarray = getTagArray(title)
+    for tag in tagarray
+      # タグを見つけたら、タグと同じチャンネル名を探してメッセージを投げる
+      robot.logger.info "tag found : #{tag}"
+
+      robot.logger.info "**************"
+      getChannelId(tag)
+      .then (result) ->
+        if result == ""
+          robot.logger.info "channel not found"
+        else
+          robot.logger.info "channel found. Id : #{result}"
+          postToChannel (result)
+      .then (result) ->
+        robot.logger.info "send message completed"
+      robot.logger.info "**************"
