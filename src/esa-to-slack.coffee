@@ -64,7 +64,7 @@ module.exports = (robot) ->
               channels[c.name] = c.id
               chid = c.id
 
-          if chid === ""
+          if chid == ""
             robot.logger.info "[" + chname + "] not found."
 
           resolve c.id
