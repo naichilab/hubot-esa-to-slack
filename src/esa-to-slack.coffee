@@ -84,3 +84,16 @@ module.exports = (robot) ->
       postToChannel (result)
     .then (result) ->
       msg.send "C"
+
+  robot.router.post "/esa-to-slack/post", (req, res) ->
+    if not req.body
+      res.end ""
+      return
+
+    room_name = req.body.room
+    message = req.body.message
+
+    room_name = "random" unless room_name
+
+    robot.send {room: room_name}, message
+    res.end "send #{room_name} #{message}"
