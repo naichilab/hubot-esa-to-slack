@@ -131,9 +131,9 @@ module.exports = (robot) ->
 
   robot.router.post "/esa-to-slack/post", (req, msg) ->
 
-    robot.logger.info "================"
-    robot.logger.info req.body
-    robot.logger.info "================"
+    # robot.logger.info "================"
+    # robot.logger.info req.body
+    # robot.logger.info "================"
 
     if not req.body
       robot.logger.info "なにかエラー"
@@ -165,7 +165,8 @@ module.exports = (robot) ->
               robot.logger.info "send message completed"
               robot.logger.info "**************"
       else
-        if result == ""
+        robot.logger.info "chid = #{chid}"
+        if chid == ""
           robot.logger.info "???"
         else
           postToChannel (chid)
