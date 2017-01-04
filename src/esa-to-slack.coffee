@@ -105,9 +105,9 @@ module.exports = (robot) ->
     tagarray = []
 
     for item in titlearray
-      m = /^#\S+$/.exec(item)
+      m = /^#(\S+)$/.exec(item)
       if m?
-        tagarray.push m[0]
+        tagarray.push m[1]
     tagarray
 
 
@@ -152,15 +152,6 @@ module.exports = (robot) ->
     tagarray = getTagArray(title)
     for tag in tagarray
       # タグを見つけたら、タグと同じチャンネル名を探してメッセージを投げる
-
-
-      chid = getChannelId("pj-req-100")
-      if chid instanceof Promise
-        chid.then (result) ->
-          msg.send "channel id is #{result}"
-      else
-        msg.send "channel id is #{chid}"
-
 
       chid = getChannelId(tag)
       if chid instanceof Promise
