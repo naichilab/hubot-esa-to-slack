@@ -159,7 +159,7 @@ module.exports = (robot) ->
             # robot.logger.info "**************"
           else
             robot.logger.info "channel found. Id : #{result}"
-            postToChannel(result)
+            postToChannel(result, username, title + " " + message + " " + url)
             .then (result) ->
               robot.logger.info "send message completed"
               # robot.logger.info "**************"
@@ -168,7 +168,7 @@ module.exports = (robot) ->
         if chid == ""
           robot.logger.info "???"
         else
-          postToChannel(chid)
+          postToChannel(chid, username, title + " " + message + " " + url)
           .then (result) ->
             robot.logger.info "send message completed"
             # robot.logger.info "**************"
