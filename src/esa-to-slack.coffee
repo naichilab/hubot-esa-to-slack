@@ -20,12 +20,9 @@ config =
   slackappsecret: process.env.HUBOT_ESA_TO_SLACK_SLACKAPPSECRET
 
 module.exports = (robot) ->
-  robot.respond /slack/, (msg) ->
-    msg.send "#{config.slacktesttoken}"
 
+  getChannelId = (chname) ->
     url = "https://slack.com/api/channels.list?token=#{config.slacktesttoken}&exclude_archived=1&pretty=1"
-    chname = "pj-req-100"
-
     robot.http(url)
       .get() (err, res, body) ->
         if err
@@ -39,12 +36,32 @@ module.exports = (robot) ->
           return
 
         chid = ""
-
         for c in data.channels
           if c.name == chname
-            chid = c.id
+            robot.logger.info "[#{c.id}]#{c.name} found."
+            return c.id
 
-        if chid != ""
-          msg.send "Found!!" + chid
-        else
-          msg.send "Not Found!!"
+        robot.logger.info "[" + chname + "] is not found."
+        return
+
+  robot.respond /slack/, (msg) ->
+
+    chid = getChannelId("pj-req-100")
+
+    robot.logger.into chid
+
+    chid.then (id) ->
+      robot.logger.info id
+
+    # chidx = getChannelId("pj-req-100")
+    #
+    # # robot.logger.info "chid type is #{typeof chid}."
+    # # robot.logger.info "chid type is #{typeof String(chid)}."
+    #
+    # robot.logger.info chidx
+
+
+    # if chidx != ""
+    #   msg.send "Found!!" + chidx
+    # else
+    #   msg.send "Not Found!!"
