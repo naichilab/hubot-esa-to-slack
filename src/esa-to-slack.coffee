@@ -14,6 +14,8 @@
 # Author:
 #   naichilab <naichilab@live.jp>
 
+require('es6-promise').polyfill()
+
 config =
   slacktesttoken: process.env.HUBOT_ESA_TO_SLACK_SLACKTESTTOKEN
   slackappid: process.env.HUBOT_ESA_TO_SLACK_SLACKAPPID

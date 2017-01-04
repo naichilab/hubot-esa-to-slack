@@ -4,25 +4,20 @@
   "version": "0.0.0",
   "author": "naichilab <naichilab@live.jp>",
   "license": "MIT",
-
   "keywords": "hubot, hubot-scripts",
-
   "repository": {
     "type": "git",
     "url": "git://github.com/hubot-scripts/hubot-esa-to-slack.git"
   },
-
   "bugs": {
     "url": "https://github.com/hubot-scripts/hubot-esa-to-slack/issues"
   },
-
   "dependencies": {
+    "es6-promise": "^4.0.5"
   },
-
   "peerDependencies": {
     "hubot": "2.x"
   },
-
   "devDependencies": {
     "hubot-test-helper": "^1.3.0",
     "chai": "^2.1.1",
@@ -38,9 +33,7 @@
     "sinon": "^1.13.0",
     "sinon-chai": "^2.7.0"
   },
-
   "main": "index.coffee",
-
   "scripts": {
     "test": "grunt test"
   }
