@@ -128,19 +128,20 @@ module.exports = (robot) ->
     robot.logger.info message
     robot.logger.info url
 
+    robot.logger.info "**************"
     tagarray = getTagArray(title)
     for tag in tagarray
       # タグを見つけたら、タグと同じチャンネル名を探してメッセージを投げる
       robot.logger.info "tag found : #{tag}"
 
-      robot.logger.info "**************"
       getChannelId(tag)
       .then (result) ->
         if result == ""
           robot.logger.info "channel not found"
+          robot.logger.info "**************"
         else
           robot.logger.info "channel found. Id : #{result}"
           postToChannel (result)
       .then (result) ->
         robot.logger.info "send message completed"
-      robot.logger.info "**************"
+        robot.logger.info "**************"
