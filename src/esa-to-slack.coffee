@@ -103,10 +103,10 @@ module.exports = (robot) ->
     title = req.body.post.name
     message = req.body.post.message
     url = req.body.post.url
-    robot.logger.into username
-    robot.logger.into title
-    robot.logger.into message
-    robot.logger.into url
+    robot.logger.info username
+    robot.logger.info title
+    robot.logger.info message
+    robot.logger.info url
 
     robot.logger.info "**************"
     robot.logger.into "post received"
