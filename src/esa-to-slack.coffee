@@ -142,10 +142,10 @@ module.exports = (robot) ->
     title = req.body.post.name
     message = req.body.post.message
     url = req.body.post.url
-    robot.logger.info username
-    robot.logger.info title
-    robot.logger.info message
-    robot.logger.info url
+    # robot.logger.info username
+    # robot.logger.info title
+    # robot.logger.info message
+    # robot.logger.info url
 
     robot.logger.info "**************"
     tagarray = getTagArray(title)
@@ -156,13 +156,13 @@ module.exports = (robot) ->
       if chid instanceof Promise
         chid.then (result) ->
           if result == ""
-            robot.logger.info "**************"
+            # robot.logger.info "**************"
           else
             robot.logger.info "channel found. Id : #{result}"
             postToChannel(result)
             .then (result) ->
               robot.logger.info "send message completed"
-              robot.logger.info "**************"
+              # robot.logger.info "**************"
       else
         robot.logger.info "chid = #{chid}"
         if chid == ""
@@ -171,4 +171,4 @@ module.exports = (robot) ->
           postToChannel(chid)
           .then (result) ->
             robot.logger.info "send message completed"
-            robot.logger.info "**************"
+            # robot.logger.info "**************"
