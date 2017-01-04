@@ -89,7 +89,7 @@ module.exports = (robot) ->
       msg.send "send message completed"
 
 
-  robot.router.post "/esa-to-slack/post", (req, res) ->
+  robot.router.post "/esa-to-slack/post", (req, msg) ->
 
     robot.logger.info "================"
     robot.logger.info req.body
@@ -107,13 +107,3 @@ module.exports = (robot) ->
       postToChannel (result)
     .then (result) ->
       msg.send "send message completed"
-    #
-    #
-    #
-    # room_name = req.body.room
-    # message = req.body.message
-    #
-    # room_name = "random" unless room_name
-    #
-    # robot.send {room: room_name}, message
-    # res.end "send #{room_name} #{message}"
