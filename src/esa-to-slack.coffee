@@ -76,24 +76,42 @@ module.exports = (robot) ->
           return
 
   robot.respond /slack/, (msg) ->
-    msg.send "A"
+
+    msg.send "slack comman received"
 
     getChannelId "pj-req-100"
     .then (result) ->
-      msg.send "B"
+      msg.send "channel id is #{result}"
       postToChannel (result)
     .then (result) ->
-      msg.send "C"
+      msg.send "send message completed"
+
 
   robot.router.post "/esa-to-slack/post", (req, res) ->
+
+    robot.logger.info "================"
+    robot.logger.info req.body
+    robot.logger.info "================"
+
     if not req.body
-      res.end ""
+      robot.logger.info "なにかエラー"
       return
 
-    room_name = req.body.room
-    message = req.body.message
+    msg.send "post received"
 
-    room_name = "random" unless room_name
-
-    robot.send {room: room_name}, message
-    res.end "send #{room_name} #{message}"
+    getChannelId "pj-req-100"
+    .then (result) ->
+      msg.send "channel id is #{result}"
+      postToChannel (result)
+    .then (result) ->
+      msg.send "send message completed"
+    #
+    #
+    #
+    # room_name = req.body.room
+    # message = req.body.message
+    #
+    # room_name = "random" unless room_name
+    #
+    # robot.send {room: room_name}, message
+    # res.end "send #{room_name} #{message}"
