@@ -50,8 +50,37 @@ module.exports = (robot) ->
           resolve ""
           return
 
+  postToChannel = (chid) ->
+    text = encodeURIComponent("this is message")
+    username = encodeURIComponent("usernameあいうえお")
+    iconemoji = encodeURIComponent(":+1:")
+    url = "https://slack.com/api/chat.postMessage?token=#{config.slacktesttoken}&channel=#{chid}&text=#{text}&username=#{username}&icon_emoji=#{iconemoji}&pretty=1"
+
+    new Promise (resolve) ->
+      robot.http(url)
+        .get() (err, res, body) ->
+          if err
+            robot.logger.error err
+            resolve ""
+            return
+
+          data = JSON.parse body
+
+          if !data.ok
+            robot.logger.error data.error
+            resolve ""
+            return
+
+          robot.logger.info "post message success"
+          resolve ""
+          return
+
   robot.respond /slack/, (msg) ->
+    msg.send "A"
 
     getChannelId "pj-req-100"
     .then (result) ->
-      msg.send result
+      msg.send "B"
+      postToChannel (result)
+    .then (result) ->
+      msg.send "C"
