@@ -101,7 +101,7 @@ module.exports = (robot) ->
 
     msg.send "post received"
 
-    getChannelId "pj-req-100"
+    getChannelId("pj-req-100")
     .then (result) ->
       msg.send "channel id is #{result}"
       postToChannel (result)
