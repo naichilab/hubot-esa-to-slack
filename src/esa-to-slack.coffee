@@ -99,11 +99,11 @@ module.exports = (robot) ->
       robot.logger.info "なにかエラー"
       return
 
-    data = JSON.parse req.body
-    username = data.user.name
-    title = data.post.name
-    message = data.post.message
-    url = data.post.url
+    # data = JSON.parse req.body
+    username = req.body.user.name
+    title = req.body.post.name
+    message = req.body.post.message
+    url = req.body.post.url
     robot.logger.into data
     robot.logger.into username
     robot.logger.into title
