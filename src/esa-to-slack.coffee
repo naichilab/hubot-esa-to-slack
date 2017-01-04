@@ -39,8 +39,7 @@ module.exports = (robot) ->
 
     if channels[chname]
       robot.logger.info "#{chname} -> #{channels[chname]}"
-      channels[chname]
-      return
+      return channels[chname]
 
     robot.logger.info "Call Slack API"
     new Promise (resolve) ->
