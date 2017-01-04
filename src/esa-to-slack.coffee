@@ -22,10 +22,26 @@ config =
   slackappsecret: process.env.HUBOT_ESA_TO_SLACK_SLACKAPPSECRET
 
 module.exports = (robot) ->
+  channels = {}
+
+  # デバッグ用
+  robot.respond /hoge/, (msg) ->
+    chid = getChannelId("pj-req-100")
+    if chid instanceof Promise
+      chid.then (result) ->
+        msg.send "channel id is #{result}"
+    else
+      msg.send "channel id is #{chid}"
+
 
   getChannelId = (chname) ->
     url = "https://slack.com/api/channels.list?token=#{config.slacktesttoken}&exclude_archived=1&pretty=1"
 
+    if channels[chname]
+      robot.logger.info "#{chname} -> #{channels[chname]}"
+      return channels[chname]
+
+    robot.logger.info "Call Slack API"
     new Promise (resolve) ->
       robot.http(url)
         .get() (err, res, body) ->
@@ -44,13 +60,17 @@ module.exports = (robot) ->
           chid = ""
           for c in data.channels
             if c.name == chname
-              robot.logger.info "[#{c.id}]#{c.name} found."
-              resolve c.id
-              return
+              robot.logger.info "#{c.name} -> #{c.id}"
+              channels[c.name] = c.id
+              chid = c.id
 
-          robot.logger.info "[" + chname + "] is not found."
-          resolve ""
+          if chid == ""
+            robot.logger.info "[" + chname + "] not found."
+
+          resolve c.id
           return
+
+
 
   postToChannel = (chid) ->
     text = encodeURIComponent("this is message")
@@ -133,14 +153,30 @@ module.exports = (robot) ->
     for tag in tagarray
       # タグを見つけたら、タグと同じチャンネル名を探してメッセージを投げる
 
-      getChannelId(tag)
-      .then (result) ->
-        robot.logger.info "tag found : #{tag}"
-        if result == ""
-          robot.logger.info "**************"
-        else
-          robot.logger.info "channel found. Id : #{result}"
-          postToChannel (result)
-          .then (result) ->
-            robot.logger.info "send message completed"
+
+      chid = getChannelId("pj-req-100")
+      if chid instanceof Promise
+        chid.then (result) ->
+          msg.send "channel id is #{result}"
+      else
+        msg.send "channel id is #{chid}"
+
+
+
+
+      chid = getChannelId(tag)
+      if chid instanceof Promise
+        chid.then (result) ->
+          if result == ""
             robot.logger.info "**************"
+          else
+            robot.logger.info "channel found. Id : #{result}"
+            postToChannel (result)
+            .then (result) ->
+              robot.logger.info "send message completed"
+              robot.logger.info "**************"
+      else
+        postToChannel (chid)
+        .then (result) ->
+          robot.logger.info "send message completed"
+          robot.logger.info "**************"
