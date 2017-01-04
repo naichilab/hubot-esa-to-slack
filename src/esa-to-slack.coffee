@@ -165,7 +165,10 @@ module.exports = (robot) ->
               robot.logger.info "send message completed"
               robot.logger.info "**************"
       else
-        postToChannel (chid)
-        .then (result) ->
-          robot.logger.info "send message completed"
-          robot.logger.info "**************"
+        if result == ""
+          robot.logger.info "???"
+        else
+          postToChannel (chid)
+          .then (result) ->
+            robot.logger.info "send message completed"
+            robot.logger.info "**************"
