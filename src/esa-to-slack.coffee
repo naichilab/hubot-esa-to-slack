@@ -99,11 +99,23 @@ module.exports = (robot) ->
       robot.logger.info "なにかエラー"
       return
 
-    msg.send "post received"
+    data = JSON.parse req.body
+    username = data.user.name
+    title = data.post.name
+    message = data.post.message
+    url = data.post.url
+    robot.logger.into data
+    robot.logger.into username
+    robot.logger.into title
+    robot.logger.into message
+    robot.logger.into url
 
+    robot.logger.info "**************"
+    robot.logger.into "post received"
     getChannelId("pj-req-100")
     .then (result) ->
-      msg.send "channel id is #{result}"
+      robot.logger.into "channel id is #{result}"
       postToChannel (result)
     .then (result) ->
-      msg.send "send message completed"
+      robot.logger.into "send message completed"
+    robot.logger.info "**************"
