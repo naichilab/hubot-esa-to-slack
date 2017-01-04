@@ -64,7 +64,7 @@ module.exports = (robot) ->
               channels[c.name] = c.id
               chid = c.id
 
-          if chid == ""
+          if chid === ""
             robot.logger.info "[" + chname + "] not found."
 
           resolve c.id
@@ -72,11 +72,13 @@ module.exports = (robot) ->
 
 
 
-  postToChannel = (chid) ->
-    text = encodeURIComponent("this is message")
-    username = encodeURIComponent("usernameあいうえお")
-    iconemoji = encodeURIComponent(":+1:")
+  postToChannel = (chid,m_username = "defaultusername",m_text = "defaulttext",m_iconemoji =":+1:") ->
+    text = encodeURIComponent(m_text)
+    username = encodeURIComponent(m_username)
+    iconemoji = encodeURIComponent(m_iconemoji)
     url = "https://slack.com/api/chat.postMessage?token=#{config.slacktesttoken}&channel=#{chid}&text=#{text}&username=#{username}&icon_emoji=#{iconemoji}&pretty=1"
+
+    robot.logger.info "PostToChannel #{url}"
 
     new Promise (resolve) ->
       robot.http(url)
@@ -110,23 +112,20 @@ module.exports = (robot) ->
 
   robot.respond /slack/, (msg) ->
 
-    msg.send "slack comman received"
+    msg.send "slack command received"
 
-    getChannelId("pj-req-100")
-    .then (result) ->
-      msg.send "channel id is #{result}"
-      postToChannel (result)
-    .then (result) ->
-      msg.send "send message completed"
+    chid = getChannelId("pj-req-100")
+    if chid instanceof Promise
+      chid.then (result) ->
+        msg.send "channel id is #{result}"
+        postToChannel (result)
+      .then (result) ->
+        msg.send "send message completed"
+    else
+      postToChannel (chid)
+      .then (result) ->
+        msg.send "send message completed"
 
-
-
-  # robot.respond /regexp/, (msg) ->
-  #   title = "test #pj-req-100 #pj-req-101"
-  #   tagarray = getTagArray(title)
-  #
-  #   for item in tagarray
-  #     robot.logger.info item
 
 
   robot.router.post "/esa-to-slack/post", (req, msg) ->
@@ -160,8 +159,6 @@ module.exports = (robot) ->
           msg.send "channel id is #{result}"
       else
         msg.send "channel id is #{chid}"
-
-
 
 
       chid = getChannelId(tag)
