@@ -118,11 +118,11 @@ module.exports = (robot) ->
     if chid instanceof Promise
       chid.then (result) ->
         msg.send "channel id is #{result}"
-        postToChannel (result)
+        postToChannel(result)
       .then (result) ->
         msg.send "send message completed"
     else
-      postToChannel (chid)
+      postToChannel(chid)
       .then (result) ->
         msg.send "send message completed"
 
@@ -159,7 +159,7 @@ module.exports = (robot) ->
             robot.logger.info "**************"
           else
             robot.logger.info "channel found. Id : #{result}"
-            postToChannel (result)
+            postToChannel(result)
             .then (result) ->
               robot.logger.info "send message completed"
               robot.logger.info "**************"
@@ -168,7 +168,7 @@ module.exports = (robot) ->
         if chid == ""
           robot.logger.info "???"
         else
-          postToChannel (chid)
+          postToChannel(chid)
           .then (result) ->
             robot.logger.info "send message completed"
             robot.logger.info "**************"
